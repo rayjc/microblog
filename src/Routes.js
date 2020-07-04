@@ -5,13 +5,14 @@ import PostDetail from './PostDetail';
 import PostList from './PostList';
 
 
-const Routes = ({ posts, addPost, updatePost, removePost }) => (
+const Routes = ({ posts, addPost, updatePost, removePost, comments, addComment, removeComment }) => (
   <Switch>
     <Route exact path="/new">
       <NewPostForm addPost={addPost} />
     </Route>
     <Route exact path="/posts/:id">
-      <PostDetail posts={posts} updatePost={updatePost} removePost={removePost} />
+      <PostDetail posts={posts} updatePost={updatePost} removePost={removePost}
+        comments={comments} addComment={addComment} removeComment={removeComment} />
     </Route>
     <Route exact path="/">
       <PostList posts={posts} />
