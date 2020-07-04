@@ -1,0 +1,12 @@
+.NewPostForm {
+    margin: 2rem;
+    padding: 2rem 3rem;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 1rem;
+}
+
+.NewPostForm-div-btn {
+    margin: 2rem auto;
+    display: flex;
+    justify-content: space-between;
+}

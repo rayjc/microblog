@@ -1,18 +1,17 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import NewPostForm from './NewPostForm';
 
 
-const Routes = () => (
+const Routes = ({ posts, addPost }) => (
   <Switch>
     <Route exact path="/new">
-      <p>
-        New Post Form
-      </p>
+      <NewPostForm addPost={addPost} />
     </Route>
     <Route exact path="/">
       <p>Home</p>
     </Route>
-    <Redirect path="/" />
+    <Redirect to="/" />
   </Switch>
 )
 
