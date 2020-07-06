@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import './EditPostForm.css';
 import PostForm from './PostForm';
+import { updatePost } from './reducers/actions';
+import { useDispatch } from 'react-redux';
 
 
-const EditPostForm = ({ post, updatePost, toggleEdit }) => {
-  const { id, title, overview, body } = post;
-  const INIT_FORM_STATE = { title, overview, body }
+const EditPostForm = ({ postId, post, toggleEdit }) => {
+  const { title, description, body } = post;
+  const dispatch = useDispatch();
+  const INIT_FORM_STATE = { title, description, body }
   const [formData, setFormData] = useState(INIT_FORM_STATE);
 
   const handleChange = (evt) => {
@@ -15,7 +18,7 @@ const EditPostForm = ({ post, updatePost, toggleEdit }) => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    updatePost({ id, ...formData });
+    dispatch(updatePost(postId, { ...formData }));
     setFormData(INIT_FORM_STATE);
     toggleEdit();
   }

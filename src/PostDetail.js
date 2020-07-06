@@ -4,11 +4,15 @@ import './PostDetail.css';
 import EditPostForm from './EditPostForm';
 import PostComments from './PostComments';
 import PostCommentForm from './PostCommentForm';
+import { useSelector, useDispatch } from 'react-redux';
+import { addComment, removeComment, removePost } from './reducers/actions';
 
 
-const PostDetail = ({ posts, updatePost, removePost, comments, addComment, removeComment }) => {
+const PostDetail = () => {
   const { id } = useParams();
-  const post = posts.find(p => p.id === id);
+  const posts = useSelector(state => state.posts);
+  const dispatch = useDispatch();
+  const post = posts[id];
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing(!isEditing);
@@ -19,20 +23,20 @@ const PostDetail = ({ posts, updatePost, removePost, comments, addComment, remov
 
   return (
     isEditing ?
-      <EditPostForm post={post} updatePost={updatePost} toggleEdit={toggleEdit} /> :
+      <EditPostForm postId={id} post={post} toggleEdit={toggleEdit} /> :
       <div className="PostDetail">
         <h3 className="row">
           {post.title}
           <span className="ml-auto">
             <button className="btn text-primary" onClick={() => setIsEditing(true)}><i className="fas fa-edit"></i></button>
-            <button className="btn text-danger" onClick={() => removePost(id)}><i className="fas fa-times"></i></button>
+            <button className="btn text-danger" onClick={() => dispatch(removePost(id))}><i className="fas fa-times"></i></button>
           </span>
         </h3>
-        <h5 className="text-muted">{post.overview}</h5>
+        <h5 className="text-muted">{post.description}</h5>
         <p className="blockquote">{post.body}</p>
         <hr />
-        <PostComments comments={comments[id]} removeComment={(idx) => removeComment(post.id, idx)} />
-        <PostCommentForm addComment={(comment) => addComment(post.id, comment)} />
+        <PostComments comments={post.comments} removeComment={(commentId) => dispatch(removeComment(id, commentId))} />
+        <PostCommentForm addComment={(comment) => dispatch(addComment(id, comment))} />
       </div>
   )
 }

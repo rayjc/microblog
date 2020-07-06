@@ -1,17 +1,16 @@
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
 
 const PostComments = ({ comments, removeComment }) => (
   <div>
-    {comments.length ?
+    {comments.length !== 0 ?
       <ul className="list-unstyled">
-        {comments.map((c, idx) =>
-          <li key={uuidv4()} className="my-2 text-muted">
-            <button className="btn text-danger mr-2" onClick={() => removeComment(idx)}>
+        {comments.map(c =>
+          <li key={c.id} className="my-2 text-muted">
+            <button className="btn text-danger mr-2" onClick={() => removeComment(c.id)}>
               <i className="fas fa-times"></i>
             </button>
-            {c}
+            {c.text}
           </li>
         )}
       </ul> :

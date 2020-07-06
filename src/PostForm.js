@@ -10,9 +10,9 @@ const PostForm = ({ handleCancel, handleSubmit, handleChange, formData }) => (
         value={formData.title} onChange={(e) => handleChange(e)} />
     </div>
     <div className="form-group">
-      <label htmlFor="overview-input">Overiew</label>
-      <input type="text" className="form-control" id="overivew-input" name="overview"
-        value={formData.overview} onChange={(e) => handleChange(e)} />
+      <label htmlFor="description-input">Description</label>
+      <input type="text" className="form-control" id="description-input" name="description"
+        value={formData.description} onChange={(e) => handleChange(e)} />
     </div>
     <div className="form-group">
       <label htmlFor="body-input">Body</label>
