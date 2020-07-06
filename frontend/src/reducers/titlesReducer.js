@@ -17,7 +17,7 @@ function titlesReducer(state = [], action) {
           allTitles.push({ ...title });
         }
         return allTitles;
-      }, [])
+      }, []);
 
     case REMOVE_TITLE:
       return state.filter(title => title.id !== action.id);

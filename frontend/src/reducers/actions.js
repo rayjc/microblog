@@ -16,7 +16,11 @@ function addPost(postId, post) {
   }
 }
 
-/** post: { title, description, body } */
+/** 
+ * Create a new post on backend via API;
+ * add this post to posts and titles in redux.
+ * 
+ * post: { title, description, body } */
 function storePost(post) {
   return async function(dispatch) {
     dispatch(resetError());
@@ -46,12 +50,40 @@ function removePost(postId) {
   }
 }
 
-/** post: { title, description, body } */
+/** post: { title, description, body, votes } */
 function updatePost(postId, post) {
   return {
     type: UPDATE_POST,
     postId,
     post,
+  }
+}
+
+/** 
+ * Update post on backend via API;
+ * update this post in redux (posts and titles).
+ * 
+ * post: {title, description, body}
+ */
+function fullUpdatePost(id, post) {
+  return async function(dispatch) {
+    dispatch(resetError());
+    dispatch(startLoad());
+
+    try {
+      const { id: postId, ...data } = await PostApi.updatePost(id, post);
+      // update post in postsReducer
+      dispatch(updatePost(postId, data));
+      // update post in titlesReducer
+      dispatch(updateTitle({
+        id: postId, title: data.title, description: data.description, votes: data.votes
+      }));
+    } catch (error) {
+      console.error(error);
+      dispatch(showError(`Cannot update post(${id}): ${post}`));
+    }
+
+    dispatch(resetLoad());
   }
 }
 
@@ -157,6 +189,6 @@ function resetLoad() {
 
 
 export {
-  addComment, storePost, removeComment, removePost, updatePost, fetchPost,
+  addComment, storePost, removeComment, removePost, fullUpdatePost, fetchPost,
   fetchTitles,
 };

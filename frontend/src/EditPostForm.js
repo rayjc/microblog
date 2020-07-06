@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './EditPostForm.css';
 import PostForm from './PostForm';
-import { updatePost } from './reducers/actions';
+import { fullUpdatePost } from './reducers/actions';
 import { useDispatch } from 'react-redux';
 
 
@@ -18,7 +18,7 @@ const EditPostForm = ({ postId, post, toggleEdit }) => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    dispatch(updatePost(postId, { ...formData }));
+    dispatch(fullUpdatePost(postId, { ...formData }));
     setFormData(INIT_FORM_STATE);
     toggleEdit();
   }
