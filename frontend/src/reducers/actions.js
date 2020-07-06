@@ -50,6 +50,26 @@ function removePost(postId) {
   }
 }
 
+function fullRemovePost(id) {
+  return async function(dispatch) {
+    dispatch(resetError());
+    dispatch(startLoad());
+
+    try {
+      await PostApi.removePost(id);
+      // update post in postsReducer
+      dispatch(removePost(id));
+      // update post in titlesReducer
+      dispatch(removeTitle(id));
+    } catch (error) {
+      console.error(error);
+      dispatch(showError(`Cannot remove post(${id})`));
+    }
+
+    dispatch(resetLoad());
+  }
+}
+
 /** post: { title, description, body, votes } */
 function updatePost(postId, post) {
   return {
@@ -189,6 +209,6 @@ function resetLoad() {
 
 
 export {
-  addComment, storePost, removeComment, removePost, fullUpdatePost, fetchPost,
+  addComment, storePost, removeComment, fullRemovePost, fullUpdatePost, fetchPost,
   fetchTitles,
 };

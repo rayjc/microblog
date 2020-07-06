@@ -67,6 +67,13 @@ router.get("/:id", async function(req, res, next) {
       ORDER BY p.id
       `, [req.params.id]
     );
+    if (result.rows.length === 0) {
+      return next({
+        status: 404,
+        message: `Cannot find post(${req.params.id}).`
+      });
+    }
+
     return res.json({ post: result.rows[0] });
   } catch (err) {
     return next(err);
