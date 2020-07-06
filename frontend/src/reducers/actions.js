@@ -1,4 +1,5 @@
-import { ADD_COMMENT, ADD_POST, REMOVE_COMMENT, REMOVE_POST, UPDATE_POST } from './actionTypes';
+import { ADD_COMMENT, ADD_POST, REMOVE_COMMENT, REMOVE_POST, UPDATE_POST, LOAD_TITLES } from './actionTypes';
+import PostApi from '../api/PostApi';
 
 
 function addPost(postId, post) {
@@ -40,5 +41,22 @@ function removeComment(postId, commentId) {
   }
 }
 
+function loadTitles(titles) {
+  return {
+    type: LOAD_TITLES,
+    titles,
+  }
+}
 
-export { addComment, addPost, removeComment, removePost, updatePost };
+function fetchTitles() {
+  return async function(dispatch) {
+    try {
+      const titles = await PostApi.getPosts();
+      dispatch(loadTitles(titles));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+}
+
+export { addComment, addPost, removeComment, removePost, updatePost, fetchTitles };
