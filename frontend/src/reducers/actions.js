@@ -4,6 +4,7 @@ import {
   SHOW_ERROR, RESET_ERROR, START_LOAD, RESET_LOAD,
 } from './actionTypes';
 import PostApi from '../api/PostApi';
+import CommentApi from '../api/CommentApi';
 
 
 /* Actions for postsReducers */
@@ -115,11 +116,59 @@ function addComment(postId, comment) {
   }
 }
 
+/**
+ * Create comment under post with postId;
+ * update posts in redux.
+ * @param {Number} postId 
+ * @param {String} comment 
+ */
+function storeComment(postId, comment) {
+  return async function(dispatch) {
+    dispatch(resetError());
+    dispatch(startLoad());
+
+    try {
+      const data = await CommentApi.createComment(comment, postId);
+      // add comment to postsReducer
+      dispatch(addComment(postId, data));
+    } catch (error) {
+      console.error(error);
+      dispatch(showError(`Cannot create comment(${comment}) under post:${postId}`));
+    }
+
+    dispatch(resetLoad());
+  }
+}
+
 function removeComment(postId, commentId) {
   return {
     type: REMOVE_COMMENT,
     postId,
     commentId,
+  }
+}
+
+/**
+ * Remove comment under post with postId;
+ * update posts in redux.
+ * @param {Number} postId 
+ * @param {Number} commentId 
+ */
+function fullRemoveComment(postId, commentId) {
+  return async function(dispatch) {
+    dispatch(resetError());
+    dispatch(startLoad());
+
+    try {
+      await CommentApi.removeComment(commentId, postId);
+      // remove comment in postsReducer
+      dispatch(removeComment(postId, commentId));
+    } catch (error) {
+      console.error(error);
+      dispatch(showError(`Cannot remove comment(${commentId}) under post(${postId}))`));
+    }
+
+    dispatch(resetLoad());
   }
 }
 
@@ -209,6 +258,6 @@ function resetLoad() {
 
 
 export {
-  addComment, storePost, removeComment, fullRemovePost, fullUpdatePost, fetchPost,
+  storeComment, storePost, fullRemoveComment, fullRemovePost, fullUpdatePost, fetchPost,
   fetchTitles,
 };

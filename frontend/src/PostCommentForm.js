@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
 
 const PostCommentForm = ({ addComment }) => {
@@ -7,7 +6,7 @@ const PostCommentForm = ({ addComment }) => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    addComment({ id: uuidv4(), text: comment });
+    addComment(comment);
     setComment("");
   }
 

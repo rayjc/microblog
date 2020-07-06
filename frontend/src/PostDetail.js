@@ -6,7 +6,7 @@ import PostComments from './PostComments';
 import PostCommentForm from './PostCommentForm';
 import Loading from './Loading';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import { addComment, removeComment, fullRemovePost, fetchPost } from './reducers/actions';
+import { storeComment, fullRemoveComment, fullRemovePost, fetchPost } from './reducers/actions';
 
 
 const PostDetail = () => {
@@ -52,8 +52,8 @@ const PostDetail = () => {
         <h5 className="text-muted">{post.description}</h5>
         <p className="blockquote">{post.body}</p>
         <hr />
-        <PostComments comments={post.comments} removeComment={(commentId) => dispatch(removeComment(id, commentId))} />
-        <PostCommentForm addComment={(comment) => dispatch(addComment(id, comment))} />
+        <PostComments comments={post.comments} removeComment={(commentId) => dispatch(fullRemoveComment(+id, +commentId))} />
+        <PostCommentForm addComment={(comment) => dispatch(storeComment(+id, comment))} />
       </div>
   )
 }
