@@ -18,7 +18,7 @@ const PostList = () => {
       <h5>Welcome to <i>Microblog</i>, a platform to share information among minimalists!</h5>
       <div className="row justify-content-center">
         {posts.map(post =>
-          <div key={post.id} className="col-4 my-3">
+          <div key={post.id} className="col-12 col-sm-8 col-md-6 col-lg-4 my-3">
             <PostCard {...post} />
           </div>
         )}

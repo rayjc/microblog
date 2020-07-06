@@ -42,13 +42,22 @@ const PostDetail = () => {
     isEditing ?
       <EditPostForm postId={id} post={post} toggleEdit={toggleEdit} /> :
       <div className="PostDetail">
-        <h3 className="row">
-          {post.title}
+        <div className="row mb-2">
           <span className="ml-auto">
             <button className="btn text-primary" onClick={() => setIsEditing(true)}><i className="fas fa-edit"></i></button>
             <button className="btn text-danger" onClick={handleRemove}><i className="fas fa-times"></i></button>
           </span>
+        </div>
+        <h3 className="row">
+          {post.title}
+
+          <span className="ml-auto">
+            <span className="mr-3 font-italic small">{post.votes}</span>
+            <button className="btn text-success"><i className="far fa-thumbs-up"></i></button>
+            <button className="btn text-danger"><i className="far fa-thumbs-down"></i></button>
+          </span>
         </h3>
+
         <h5 className="text-muted">{post.description}</h5>
         <p className="blockquote">{post.body}</p>
         <hr />
