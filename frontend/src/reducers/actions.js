@@ -7,11 +7,35 @@ import PostApi from '../api/PostApi';
 
 
 /* Actions for postsReducers */
+/** post: { title, description, body, votes } */
 function addPost(postId, post) {
   return {
     type: ADD_POST,
     postId,
     post,
+  }
+}
+
+/** post: { title, description, body } */
+function storePost(post) {
+  return async function(dispatch) {
+    dispatch(resetError());
+    dispatch(startLoad());
+
+    try {
+      const { id, ...data } = await PostApi.createPost(post);
+      // add post to postsReducer
+      dispatch(addPost(id, data));
+      // add partial post to titlesReducer
+      dispatch(addTitle({
+        id, title: data.title, description: data.description, votes: data.votes
+      }));
+    } catch (error) {
+      console.error(error);
+      dispatch(showError(`Cannot create post: ${post}`));
+    }
+
+    dispatch(resetLoad());
   }
 }
 
@@ -22,6 +46,7 @@ function removePost(postId) {
   }
 }
 
+/** post: { title, description, body } */
 function updatePost(postId, post) {
   return {
     type: UPDATE_POST,
@@ -73,6 +98,7 @@ function fetchPost(id) {
 
 
 /* Actions for titlesReducer */
+/** titles: [{ id, title, description, votes }, ...] */
 function loadTitles(titles) {
   return {
     type: LOAD_TITLES,
@@ -97,10 +123,12 @@ function fetchTitles() {
   };
 }
 
+/** title: { id, title, description, votes } */
 function addTitle(title) {
   return { type: ADD_TITLE, title, };
 }
 
+/** title: { id, title, description, votes } */
 function updateTitle(title) {
   return { type: UPDATE_TITLE, title, };
 }
@@ -128,4 +156,7 @@ function resetLoad() {
 }
 
 
-export { addComment, addPost, removeComment, removePost, updatePost, fetchTitles, fetchPost };
+export {
+  addComment, storePost, removeComment, removePost, updatePost, fetchPost,
+  fetchTitles,
+};

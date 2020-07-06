@@ -2,10 +2,16 @@ import React from 'react';
 import PostCard from './PostCard';
 import './PostList.css';
 import { useSelector } from 'react-redux';
+import Loading from './Loading';
 
 
 const PostList = () => {
   const posts = useSelector(state => state.titles);
+  const status = useSelector(state => state.status);
+
+  if (status.isLoading) {
+    return <Loading />
+  }
 
   return (
     <div className="PostList">

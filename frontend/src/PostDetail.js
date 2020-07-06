@@ -4,6 +4,7 @@ import './PostDetail.css';
 import EditPostForm from './EditPostForm';
 import PostComments from './PostComments';
 import PostCommentForm from './PostCommentForm';
+import Loading from './Loading';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { addComment, removeComment, removePost, fetchPost } from './reducers/actions';
 
@@ -28,13 +29,7 @@ const PostDetail = () => {
   if (status.error) {
     return <Redirect to="/" />
   } else if (!post) {
-    return (
-      <div className="text-center">
-        <div className="spinner-border" role="status">
-          <span className="sr-only">Loading...</span>
-        </div>
-      </div>
-    )
+    return <Loading />
   }
 
   return (

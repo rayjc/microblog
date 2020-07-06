@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import './NewPostForm.css';
 import { useHistory } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import PostForm from './PostForm';
-import { addPost } from './reducers/actions';
+import { storePost } from './reducers/actions';
 import { useDispatch } from 'react-redux';
 
 
@@ -24,8 +23,7 @@ const NewPostForm = () => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    // addPost({ id: uuidv4(), ...formData });
-    dispatch(addPost(uuidv4(), { ...formData }));
+    dispatch(storePost({ ...formData }));
     setFormData(INIT_FORM_STATE);
     history.push("/");
   }
