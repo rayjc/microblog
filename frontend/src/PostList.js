@@ -5,9 +5,7 @@ import { useSelector } from 'react-redux';
 
 
 const PostList = () => {
-  const posts = useSelector(state =>
-    Object.entries(state.posts).map(([id, post]) => ({ id, ...post }))
-  );
+  const posts = useSelector(state => state.titles);
 
   return (
     <div className="PostList">

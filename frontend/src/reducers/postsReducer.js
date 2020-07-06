@@ -1,4 +1,6 @@
-import { ADD_COMMENT, ADD_POST, REMOVE_COMMENT, REMOVE_POST, UPDATE_POST } from './actionTypes';
+import {
+  ADD_COMMENT, ADD_POST, REMOVE_COMMENT, REMOVE_POST, UPDATE_POST, LOAD_POST
+} from './actionTypes';
 
 
 const INITIAL_STATE = {
@@ -30,6 +32,9 @@ function postsReducer(state = INITIAL_STATE, action) {
           comments: [...postToUpdate.comments]
         }
       };
+
+    case LOAD_POST:
+      return { ...state, [action.id]: { ...action.post } };
 
     case ADD_COMMENT:
       // extract post to be updated

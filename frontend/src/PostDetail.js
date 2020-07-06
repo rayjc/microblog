@@ -1,24 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 import './PostDetail.css';
 import EditPostForm from './EditPostForm';
 import PostComments from './PostComments';
 import PostCommentForm from './PostCommentForm';
-import { useSelector, useDispatch } from 'react-redux';
-import { addComment, removeComment, removePost } from './reducers/actions';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { addComment, removeComment, removePost, fetchPost } from './reducers/actions';
 
 
 const PostDetail = () => {
   const { id } = useParams();
-  const posts = useSelector(state => state.posts);
+  const posts = useSelector(state => state.posts, shallowEqual);
+  const status = useSelector(state => state.status);
   const dispatch = useDispatch();
   const post = posts[id];
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing(!isEditing);
 
-  if (!post) {
+  useEffect(() => {
+    if (!posts.hasOwnProperty(id)) {
+      // load post to redux
+      dispatch(fetchPost(id));
+    }
+  }, [id, dispatch, posts]);
+
+  if (status.error) {
     return <Redirect to="/" />
+  } else if (!post) {
+    return (
+      <div className="text-center">
+        <div className="spinner-border" role="status">
+          <span className="sr-only">Loading...</span>
+        </div>
+      </div>
+    )
   }
 
   return (

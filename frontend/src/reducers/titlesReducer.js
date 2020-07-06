@@ -1,4 +1,4 @@
-import { LOAD_TITLES, ADD_TITLES, UPDATE_TITLES, REMOVE_TITLES } from './actionTypes';
+import { LOAD_TITLES, ADD_TITLE, UPDATE_TITLE, REMOVE_TITLE } from './actionTypes';
 
 
 function titlesReducer(state = [], action) {
@@ -6,10 +6,10 @@ function titlesReducer(state = [], action) {
     case LOAD_TITLES:
       return [...action.titles];
 
-    case ADD_TITLES:
+    case ADD_TITLE:
       return [...state, action.title];
 
-    case UPDATE_TITLES:
+    case UPDATE_TITLE:
       return state.reduce((allTitles, title) => {
         if (title.id === action.title.id) {
           allTitles.push({ ...action.title });
@@ -19,7 +19,7 @@ function titlesReducer(state = [], action) {
         return allTitles;
       }, [])
 
-    case REMOVE_TITLES:
+    case REMOVE_TITLE:
       return state.filter(title => title.id !== action.id);
 
     default:
