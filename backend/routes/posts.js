@@ -18,7 +18,7 @@ const router = new express.Router();
  *
  */
 
-router.get("/", async function (req, res, next) {
+router.get("/", async function(req, res, next) {
   try {
     const result = await db.query(
       `SELECT p.id,
@@ -29,7 +29,7 @@ router.get("/", async function (req, res, next) {
       ORDER BY p.id
       `
     );
-    return res.json(result.rows);
+    return res.json({ posts: result.rows });
   } catch (err) {
     return next(err);
   }
@@ -48,7 +48,7 @@ router.get("/", async function (req, res, next) {
  *      }
  */
 
-router.get("/:id", async function (req, res, next) {
+router.get("/:id", async function(req, res, next) {
   try {
     const result = await db.query(
       `SELECT p.id,
@@ -67,7 +67,7 @@ router.get("/:id", async function (req, res, next) {
       ORDER BY p.id
       `, [req.params.id]
     );
-    return res.json(result.rows[0]);
+    return res.json({ post: result.rows[0] });
   } catch (err) {
     return next(err);
   }
@@ -80,13 +80,13 @@ router.get("/:id", async function (req, res, next) {
  *
  */
 
-router.post("/:id/vote/:direction", async function (req, res, next) {
+router.post("/:id/vote/:direction", async function(req, res, next) {
   try {
     let delta = req.params.direction === "up" ? +1 : -1;
     const result = await db.query(
       "UPDATE posts SET votes=votes + $1 WHERE id = $2 RETURNING votes",
       [delta, req.params.id]);
-    return res.json(result.rows[0]);
+    return res.json({ votes: result.rows[0] });
   } catch (err) {
     return next(err);
   }
@@ -99,15 +99,15 @@ router.post("/:id/vote/:direction", async function (req, res, next) {
  *
  */
 
-router.post("/", async function (req, res, next) {
+router.post("/", async function(req, res, next) {
   try {
-    const {title, body, description} = req.body;
+    const { title, body, description } = req.body;
     const result = await db.query(
       `INSERT INTO posts (title, description, body) 
         VALUES ($1, $2, $3) 
         RETURNING id, title, description, body, votes`,
       [title, description, body]);
-    return res.status(201).json(result.rows[0]);
+    return res.status(201).json({ post: result.rows[0] });
   } catch (err) {
     return next(err);
   }
@@ -120,15 +120,15 @@ router.post("/", async function (req, res, next) {
  *
  */
 
-router.put("/:id", async function (req, res, next) {
+router.put("/:id", async function(req, res, next) {
   try {
-    const {title, body, description} = req.body;
+    const { title, body, description } = req.body;
     const result = await db.query(
       `UPDATE posts SET title=$1, description=$2, body=$3
         WHERE id = $4 
         RETURNING id, title, description, body, votes`,
       [title, description, body, req.params.id]);
-    return res.json(result.rows[0]);
+    return res.json({ post: result.rows[0] });
   } catch (e) {
     return next(e);
   }

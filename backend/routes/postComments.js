@@ -11,12 +11,12 @@ const router = express.Router({ mergeParams: true });
  *
  */
 
-router.get("/", async function (req, res, next) {
+router.get("/", async function(req, res, next) {
   try {
     const result = await db.query(
       "SELECT id, text FROM comments WHERE post_id = $1 ORDER BY id",
       [req.params.post_id]);
-    return res.json(result.rows);
+    return res.json({ comments: result.rows });
   } catch (err) {
     return next(err);
   }
@@ -29,13 +29,13 @@ router.get("/", async function (req, res, next) {
  *
  */
 
-router.post("/", async function (req, res, next) {
+router.post("/", async function(req, res, next) {
   try {
     const result = await db.query(
       `INSERT INTO comments (text, post_id) VALUES ($1, $2) 
         RETURNING id, text`,
       [req.body.text, req.params.post_id]);
-    return res.json(result.rows[0]);
+    return res.json({ comment: result.rows[0] });
   } catch (err) {
     return next(err);
   }
@@ -48,12 +48,12 @@ router.post("/", async function (req, res, next) {
  *
  */
 
-router.put("/:id", async function (req, res, next) {
+router.put("/:id", async function(req, res, next) {
   try {
     const result = await db.query(
       "UPDATE comments SET text=$1 WHERE id = $2 RETURNING id, text",
       [req.body.text, req.params.id]);
-    return res.json(result.rows[0]);
+    return res.json({ comment: result.rows[0] });
   } catch (err) {
     return next(err);
   }
@@ -66,7 +66,7 @@ router.put("/:id", async function (req, res, next) {
  *
  */
 
-router.delete("/:id", async function (req, res, next) {
+router.delete("/:id", async function(req, res, next) {
   try {
     await db.query("DELETE FROM comments WHERE id=$1", [req.params.id]);
     return res.json({ message: "deleted" });
