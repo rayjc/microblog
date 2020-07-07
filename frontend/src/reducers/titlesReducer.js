@@ -1,7 +1,7 @@
-import { LOAD_TITLES, ADD_TITLE, UPDATE_TITLE, REMOVE_TITLE } from './actionTypes';
+import { LOAD_TITLES, ADD_TITLE, UPDATE_TITLE, REMOVE_TITLE, UPDATE_TITLE_VOTE } from './actionTypes';
 
 
-function titlesReducer(state = [], action) {
+function titlesReducer(state = null, action) {
   switch (action.type) {
     case LOAD_TITLES:
       return [...action.titles];
@@ -21,6 +21,18 @@ function titlesReducer(state = [], action) {
 
     case REMOVE_TITLE:
       return state.filter(title => title.id !== action.id);
+
+    case UPDATE_TITLE_VOTE:
+      return state.reduce((allTitles, title) => {
+        if (title.id === action.postId) {
+          const { votes } = title;
+          const newVotes = action.isIncrement ? votes + 1 : votes - 1;
+          allTitles.push({ ...title, votes: newVotes });
+        } else {
+          allTitles.push({ ...title });
+        }
+        return allTitles;
+      }, []);
 
     default:
       return state;

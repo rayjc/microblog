@@ -18,7 +18,7 @@ class PostApi {
   }
 
   static async updateVote(id, isIncrement = true) {
-    const res = await ApiHelper.request(`posts/${id}/${isIncrement ? 'up' : 'down'}`, undefined, "post");
+    const res = await ApiHelper.request(`posts/${id}/vote/${isIncrement ? 'up' : 'down'}`, undefined, "post");
     return res.votes;
   }
 

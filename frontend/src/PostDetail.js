@@ -6,7 +6,7 @@ import PostComments from './PostComments';
 import PostCommentForm from './PostCommentForm';
 import Loading from './Loading';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import { storeComment, fullRemoveComment, fullRemovePost, fetchPost } from './reducers/actions';
+import { storeComment, fullRemoveComment, fullRemovePost, fetchPost, fullUpdateVote } from './reducers/actions';
 
 
 const PostDetail = () => {
@@ -50,11 +50,14 @@ const PostDetail = () => {
         </div>
         <h3 className="row">
           {post.title}
-
           <span className="ml-auto">
             <span className="mr-3 font-italic small">{post.votes}</span>
-            <button className="btn text-success"><i className="far fa-thumbs-up"></i></button>
-            <button className="btn text-danger"><i className="far fa-thumbs-down"></i></button>
+            <button className="btn text-success" onClick={() => dispatch(fullUpdateVote(+id, true))}>
+              <i className="far fa-thumbs-up"></i>
+            </button>
+            <button className="btn text-danger" onClick={() => dispatch(fullUpdateVote(+id, false))}>
+              <i className="far fa-thumbs-down"></i>
+            </button>
           </span>
         </h3>
 

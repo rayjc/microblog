@@ -1,5 +1,5 @@
 import {
-  ADD_COMMENT, ADD_POST, REMOVE_COMMENT, REMOVE_POST, UPDATE_POST, LOAD_POST
+  ADD_COMMENT, ADD_POST, REMOVE_COMMENT, REMOVE_POST, UPDATE_POST, LOAD_POST, UPDATE_POST_VOTE
 } from './actionTypes';
 
 
@@ -56,6 +56,20 @@ function postsReducer(state = INITIAL_STATE, action) {
         ...leftoverPosts,
         [action.postId]: {
           ...leftOverPart, comments: newComments
+        }
+      }
+
+    case UPDATE_POST_VOTE:
+      if (!state.hasOwnProperty(action.postId)) {
+        return state;
+      }
+      const { [action.postId]: votedPost, ...unvotedPosts } = state;
+      const { votes, ...votedPostParts } = votedPost;
+      const newVotes = action.isIncrement ? votes + 1 : votes - 1;
+      return {
+        ...unvotedPosts,
+        [action.postId]: {
+          ...votedPostParts, votes: newVotes
         }
       }
 

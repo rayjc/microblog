@@ -7,9 +7,8 @@ import Loading from './Loading';
 
 const PostList = () => {
   const posts = useSelector(state => state.titles);
-  const status = useSelector(state => state.status);
 
-  if (status.isLoading) {
+  if (!posts) {
     return <Loading />
   }
 

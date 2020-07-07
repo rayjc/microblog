@@ -1,6 +1,6 @@
 import {
-  ADD_COMMENT, ADD_POST, REMOVE_COMMENT, REMOVE_POST, UPDATE_POST, LOAD_POST,
-  LOAD_TITLES, ADD_TITLE, UPDATE_TITLE, REMOVE_TITLE,
+  ADD_COMMENT, ADD_POST, REMOVE_COMMENT, REMOVE_POST, UPDATE_POST, LOAD_POST, UPDATE_POST_VOTE,
+  LOAD_TITLES, ADD_TITLE, UPDATE_TITLE, REMOVE_TITLE, UPDATE_TITLE_VOTE,
   SHOW_ERROR, RESET_ERROR, START_LOAD, RESET_LOAD,
 } from './actionTypes';
 import PostApi from '../api/PostApi';
@@ -172,6 +172,40 @@ function fullRemoveComment(postId, commentId) {
   }
 }
 
+function updatePostVote(postId, isIncrement) {
+  return { type: UPDATE_POST_VOTE, postId, isIncrement };
+}
+
+function updateTitleVote(postId, isIncrement) {
+  return { type: UPDATE_TITLE_VOTE, postId, isIncrement };
+}
+
+/**
+ * Up/down vote post with postId in backend;
+ * update votes in posts and titles.
+ * @param {Number} postId 
+ * @param {Boolean} isIncrement 
+ */
+function fullUpdateVote(postId, isIncrement) {
+  return async function(dispatch) {
+    dispatch(resetError());
+    dispatch(startLoad());
+
+    try {
+      await PostApi.updateVote(postId, isIncrement);
+      // update vote in postsReducer
+      dispatch(updatePostVote(postId, isIncrement));
+      // update vote in titlesReducer
+      dispatch(updateTitleVote(postId, isIncrement));
+    } catch (error) {
+      console.error(error);
+      dispatch(showError(`Cannot update vote under post(${postId}))`));
+    }
+
+    dispatch(resetLoad());
+  }
+}
+
 function loadPost(id, post) {
   return {
     type: LOAD_POST,
@@ -259,5 +293,5 @@ function resetLoad() {
 
 export {
   storeComment, storePost, fullRemoveComment, fullRemovePost, fullUpdatePost, fetchPost,
-  fetchTitles,
+  fetchTitles, fullUpdateVote
 };
